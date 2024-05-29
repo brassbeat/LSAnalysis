@@ -6,7 +6,7 @@ Created on 2024-05-25
 
 import pandas as pd
 
-from ls_analysis.data.core import LivesplitData
+from ls_analysis.data.livesplit_data import LivesplitData
 
 
 def get_latest_n(data: LivesplitData, n: int) -> pd.DataFrame:

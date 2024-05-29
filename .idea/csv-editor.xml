@@ -31,6 +31,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\test\exports\test_interpolation.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\test\test_results\logrank_brass_any_helios_any.csv">
           <value>
             <Attribute>
