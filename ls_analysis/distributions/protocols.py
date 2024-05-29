@@ -14,5 +14,5 @@ class SegmentDistribution(Protocol):
     def segment_count(self) -> int:
         ...
 
-    def get_quantile_times(self, quantiles: pd.Series | float) -> pd.Series:
+    def get_quantile_times(self, quantiles: pd.Series | float) -> pd.DataFrame:
         ...

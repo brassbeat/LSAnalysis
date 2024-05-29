@@ -8,7 +8,7 @@ import pandas as pd
 from scipy import stats
 from scipy.stats import CensoredData
 
-from ls_analysis.data.core import LivesplitData
+from ls_analysis.data.livesplit_data import LivesplitData
 from ls_analysis.statistics.core.censored_data import get_censored_segment_data
 
 

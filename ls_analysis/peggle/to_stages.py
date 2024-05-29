@@ -8,7 +8,7 @@ import itertools as it
 
 import pandas as pd
 
-from ls_analysis.data.core import LivesplitData
+from ls_analysis.data.livesplit_data import LivesplitData
 from ls_analysis.data.enums import AttemptStat, IndexCategory
 from ls_analysis.data.import_lss import remake_livesplit_data
 

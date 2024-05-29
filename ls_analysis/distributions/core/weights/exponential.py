@@ -8,7 +8,9 @@ import pandas as pd
 
 
 def get_weights(values: pd.Series, decay: float) -> pd.Series:
-    ones = values.mask(values.notna(), 1)
+    ones = (
+        values.map(lambda _: 1., na_action="ignore")
+    )
     exponents = ones.sum() - ones.cumsum()
     denormalized_weights = exponents.rpow(decay).convert_dtypes()
     return denormalized_weights
