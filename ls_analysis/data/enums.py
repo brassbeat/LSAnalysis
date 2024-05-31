@@ -17,13 +17,10 @@ class AttemptStat(StrEnum):
     LAST_SPLIT = enum.auto()
     RESET_AT = enum.auto()
     TIME_UPON_RESET = enum.auto()
+
     SEGMENT_TIME = enum.auto()
     SPLIT_TIME = enum.auto()
-
-    @classmethod
-    @property
-    def last_stat_in_import_attempts(cls):
-        return cls.CUMULATIVE_PLAYTIME
+    RESET_TIME = enum.auto()
 
     @classmethod
     @property

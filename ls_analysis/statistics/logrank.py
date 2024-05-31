@@ -3,6 +3,8 @@ Created on 2024-05-26
 
 @author: brassbeat
 """
+from collections.abc import Iterable
+
 import attrs
 import pandas as pd
 from scipy import stats

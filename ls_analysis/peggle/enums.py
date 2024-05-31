@@ -43,8 +43,7 @@ class PeggleEdition(StrEnum):
 
     @property
     def level_names(self) -> list[str]:
-        spaced_names: Iterator[list[str]] = map(lambda s: ["", "", s.value, "", ""], self.stages)
-        return list(itertools.chain.from_iterable(spaced_names))
+        return _LEVEL_NAMES[self]
 
     @property
     def level_codes(self) -> list[str]:
@@ -105,6 +104,66 @@ _STAGE_ORDERS = {
                 StageName.BJORN,
                 StageName.SPLORK,
         ],
+}
+
+_LEVEL_NAMES = {
+    PeggleEdition.DELUXE: [
+        "Peggleland",
+        "Slip and Slide",
+        "Bjorn's Gazebo",
+        "Das Bucket",
+        "Snow Day",
+        "Birdy's Crib",
+        "Buffalo Wings",
+        "Skate Park",
+        "Spiral of Doom",
+        "Mr. Peepers",
+        "Scarab Crunch",
+        "Infinite Cheese",
+        "Ra Deal",
+        "Croco-gator Pit",
+        "The Fever Level",
+        "The Amoeban",
+        "The Last Flower",
+        "We Come In Peace",
+        "Maid in Space",
+        "Getting the Spare",
+        "Pearl Clam",
+        "Insane Aquarium",
+        "Tasty Waves",
+        "Our Favorite Eel",
+        "Love Story",
+        "Waves",
+        "Spiderweb",
+        "Blockers",
+        "Baseball",
+        "Vermin",
+        "Holland Oats",
+        "I Heart Flowers",
+        "Workin From Home",
+        "Tula's Ride",
+        "70 and Sunny",
+        "Win a Monkey",
+        "Dog Pinball",
+        "Spin Again",
+        "Roll 'em",
+        "Five of a Kind",
+        "The Love Moat",
+        "Doom With a View",
+        "Rhombi",
+        "9 Luft Balloons",
+        "Twisted Sisters",
+        "Spin Cycle",
+        "The Dude Abides",
+        "When Pigs Fly",
+        "Yang, Yin",
+        "Zen Frog",
+        "Paw Reader",
+        "End of Time",
+        "Billions & Billions",
+        "Don't Panic",
+        "Beyond Reason",
+    ]
 }
 
 _STAGE_COLORS = {

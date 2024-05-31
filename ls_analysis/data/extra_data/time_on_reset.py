@@ -5,7 +5,7 @@ Created on 2024-05-25
 """
 import pandas as pd
 
-from ls_analysis.data.enums import AttemptStat
+from ls_analysis.data.enums import AttemptStat, IndexCategory
 
 
 def get_time_on_reset(attempt_data: pd.DataFrame, segment_data: pd.DataFrame) -> pd.Series:
@@ -25,33 +25,34 @@ def get_time_on_reset(attempt_data: pd.DataFrame, segment_data: pd.DataFrame) ->
     )
 
 
-def get_time_on_reset_with_last_reset(attempt_data: pd.DataFrame, segment_data: pd.DataFrame) -> pd.Series:
-    def get_last_split_time(segment: int):
-        try:
-            return split_times.at[next(indices), segment]
-        except KeyError:
-            return None
+def add_reset_time_to_segment_data(segment_data: pd.DataFrame, attempt_data: pd.DataFrame) -> pd.DataFrame:
+    attempt_contains_reset = attempt_data[AttemptStat.RESET_AT].notna()
 
-    attempt_times: pd.Series = attempt_data[AttemptStat.ATTEMPT_TIME]
-    segments_reset_on: pd.Series = attempt_data[AttemptStat.RESET_AT]
-
-    possibly_last_timed_split = (
-        segments_reset_on
-        .sub(1)
-        .mask(segments_reset_on == 1, None)
-    )
-    indices = iter(attempt_times.index)
-
-    split_times: pd.DataFrame = segment_data[AttemptStat.SPLIT_TIME]
-    last_recorded_splits = (
-        possibly_last_timed_split
-        .map(get_last_split_time)
-    )
-    return (
-        attempt_times
-        .sub(last_recorded_splits)
-        .where(
-            cond=attempt_times > last_recorded_splits
+    attempt_times_aligned_to_segments: pd.DataFrame = (
+        attempt_data
+        .loc[attempt_contains_reset, [AttemptStat.RESET_AT, AttemptStat.ATTEMPT_TIME]]
+        .rename(
+            columns={
+                AttemptStat.RESET_AT: IndexCategory.SEGMENT,
+                AttemptStat.ATTEMPT_TIME: AttemptStat.RESET_TIME,
+            }
         )
+        .pivot(columns=IndexCategory.SEGMENT)
+    )
+    reset_times = (
+        attempt_times_aligned_to_segments
+        .sub(
+            segment_data
+            .loc[:, AttemptStat.SPLIT_TIME]
+            .rename(columns={AttemptStat.SPLIT_TIME: AttemptStat.RESET_TIME})
+            .shift(periods=1, axis="columns", fill_value=pd.Timedelta(seconds=0))
+        )
+    )
+    return pd.concat(
+        [
+            segment_data,
+            reset_times,
+        ],
+        axis=1
     )
 

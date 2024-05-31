@@ -17,6 +17,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\test\exports\britsha_resets.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\test\exports\helios_any.csv">
           <value>
             <Attribute>

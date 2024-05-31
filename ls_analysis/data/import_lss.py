@@ -13,7 +13,7 @@ from typing import TextIO, Literal
 from ls_analysis.data.clean_segments import clean_up_segments
 from ls_analysis.data.enums import AttemptStat, IndexCategory
 from ls_analysis.data.extra_data.reset_on import get_segment_reset_on
-from ls_analysis.data.extra_data.time_on_reset import get_time_on_reset
+from ls_analysis.data.extra_data.time_on_reset import get_time_on_reset, add_reset_time_to_segment_data
 
 
 def _read_segments(f: TextIO, timing_method: Literal["RealTime", "GameTime"] = "RealTime") -> pd.DataFrame:
@@ -133,6 +133,7 @@ def _read_attempts(f: TextIO, timing_method: Literal["RealTime", "GameTime"] = "
 
     return (
         data
+        .rename_axis(IndexCategory.STATISTIC, axis=1)
     )
 
 
@@ -145,14 +146,10 @@ def _add_extra_attempt_stats(attempt_data: pd.DataFrame, segment_data: pd.DataFr
 
 def _join_livesplit_data(attempt_data: pd.DataFrame, segment_data: pd.DataFrame) -> pd.DataFrame:
 
-    attempt_data = attempt_data.rename(columns=lambda s: (s, -1))
-
-    attempt_data.columns = pd.MultiIndex.from_tuples(
-        attempt_data.columns,
-        names=[
-            IndexCategory.STATISTIC,
-            IndexCategory.SEGMENT
-        ],
+    attempt_data = (
+        attempt_data
+        .assign(**{IndexCategory.SEGMENT: -1})
+        .pivot(columns=IndexCategory.SEGMENT)
     )
 
     data: pd.DataFrame = (
@@ -216,6 +213,7 @@ def import_lss(f: TextIO, timing_method: Literal["RealTime", "GameTime"] = "Real
 
     segment_data = clean_up_segments(attempt_data, segment_data)
     attempt_data = _add_extra_attempt_stats(attempt_data, segment_data)
+    segment_data = add_reset_time_to_segment_data(segment_data, attempt_data)
 
     return _join_livesplit_data(attempt_data, segment_data)
 
